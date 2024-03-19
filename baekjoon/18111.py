@@ -1,1 +1,49 @@
-{"nbformat":4,"nbformat_minor":0,"metadata":{"colab":{"provenance":[],"authorship_tag":"ABX9TyOg9c7KUPTiUMAL9IgvTnwc"},"kernelspec":{"name":"python3","display_name":"Python 3"},"language_info":{"name":"python"}},"cells":[{"cell_type":"code","execution_count":null,"metadata":{"id":"2Oj9nQGUoDRm"},"outputs":[],"source":["# 18111\n","\n","import sys\n","input = sys.stdin.readline\n","\n","def flatten(h):\n","  blocks = b\n","  time = 0\n","\n","  for i in range(n):\n","    for j in range(m):\n","      if data[i][j]>h:\n","        blocks += data[i][j]-h\n","        time += 2*(data[i][j]-h)\n","      else:\n","        blocks -= h-data[i][j]\n","        time += h-data[i][j]\n","\n","  if blocks<0:\n","    return False,-1\n","\n","  return True,time\n","\n","def solution(n,m,b,data):\n","  low = min([min(row) for row in data])\n","  high = max([max(row) for row in data])\n","\n","  min_time = int(1e9)\n","  max_height = 0\n","\n","  for i in range(low,high+1):\n","    check,time = flatten(i)\n","    if check:\n","      if time<min_time:\n","        min_time = time\n","        max_height = i\n","      elif time==min_time:\n","        max_height = i\n","    else:\n","      break\n","\n","  print(min_time,max_height)\n","\n","n,m,b = map(int,input().split())\n","data = []\n","for _ in range(n):\n","  data.append(list(map(int,input().split())))\n","\n","solution(n,m,b,data)"]}]}
+# 18111
+
+import sys
+input = sys.stdin.readline
+
+def flatten(h):
+  blocks = b
+  time = 0
+
+  for i in range(n):
+    for j in range(m):
+      if data[i][j]>h:
+        blocks += data[i][j]-h
+        time += 2*(data[i][j]-h)
+      else:
+        blocks -= h-data[i][j]
+        time += h-data[i][j]
+
+  if blocks<0:
+    return False,-1
+
+  return True,time
+
+def solution(n,m,b,data):
+  low = min([min(row) for row in data])
+  high = max([max(row) for row in data])
+
+  min_time = int(1e9)
+  max_height = 0
+
+  for i in range(low,high+1):
+    check,time = flatten(i)
+    if check:
+      if time<min_time:
+        min_time = time
+        max_height = i
+      elif time==min_time:
+        max_height = i
+    else:
+      break
+
+  print(min_time,max_height)
+
+n,m,b = map(int,input().split())
+data = []
+for _ in range(n):
+  data.append(list(map(int,input().split())))
+
+solution(n,m,b,data)

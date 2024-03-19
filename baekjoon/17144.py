@@ -1,1 +1,92 @@
-{"nbformat":4,"nbformat_minor":0,"metadata":{"colab":{"provenance":[],"authorship_tag":"ABX9TyNK+nT1sqqfTy+NEycQDqeT"},"kernelspec":{"name":"python3","display_name":"Python 3"},"language_info":{"name":"python"}},"cells":[{"cell_type":"code","execution_count":null,"metadata":{"id":"_dNPyK5Xqied"},"outputs":[],"source":["# 17144\n","\n","import copy\n","\n","dx = [-1,0,1,0]\n","dy = [0,1,0,-1]\n","\n","def spread(graph):\n","  temp = [[0]*m for _ in range(n)]\n","  for i in range(n):\n","    for j in range(m):\n","      temp[i][j] = graph[i][j]\n","\n","  for x in range(n):\n","    for y in range(m):\n","      if graph[x][y]>0:\n","        for d in range(4):\n","          nx = x + dx[d]\n","          ny = y + dy[d]\n","          if nx>=0 and nx<n and ny>=0 and ny<m:\n","            if graph[nx][ny]!=-1:\n","              temp[nx][ny] += graph[x][y]//5\n","              temp[x][y] -= graph[x][y]//5\n","\n","  return temp\n","\n","def fresh(graph,fresh_loc):\n","  x,y = fresh_loc[0]\n","  d = 0\n","  while True:\n","    nx = x + dx[d]\n","    ny = y + dy[d]\n","    if nx>=0 and nx<fresh_loc[0][0]+1 and ny>=0 and ny<m:\n","      if graph[nx][ny]==-1:\n","        break\n","      if graph[x][y]==-1:\n","        graph[nx][ny] = 0\n","      else:\n","        graph[x][y] = graph[nx][ny]\n","        graph[nx][ny] = 0\n","      x,y = nx,ny\n","    else:\n","      d = (d+1)%4\n","\n","  x,y = fresh_loc[1]\n","  d = 2\n","  while True:\n","    nx = x + dx[d]\n","    ny = y + dy[d]\n","    if nx>=fresh_loc[1][0] and nx<n and ny>=0 and ny<m:\n","      if graph[nx][ny]==-1:\n","        break\n","      if graph[x][y]==-1:\n","        graph[nx][ny] = 0\n","      else:\n","        graph[x][y] = graph[nx][ny]\n","        graph[nx][ny] = 0\n","      x,y = nx,ny\n","    else:\n","      d = (d-1)%4\n","\n","  return graph\n","\n","def solution(t,_graph):\n","  graph = copy.deepcopy(_graph)\n","\n","  fresh_loc = []\n","  for i in range(n):\n","    for j in range(m):\n","      if graph[i][j]==-1:\n","        fresh_loc.append((i,j))\n","\n","  time = 0\n","  while time<t:\n","    graph = spread(graph)\n","    graph = fresh(graph,fresh_loc)\n","    time += 1\n","\n","  result = 0\n","  for i in range(n):\n","    for j in range(m):\n","      if graph[i][j]>0:\n","        result += graph[i][j]\n","\n","  return result\n","\n","n,m,t = map(int,input().split())\n","graph = []\n","for _ in range(n):\n","  graph.append(list(map(int,input().split())))\n","\n","print(solution(t,graph))"]}]}
+# 17144
+
+import copy
+
+dx = [-1,0,1,0]
+dy = [0,1,0,-1]
+
+def spread(graph):
+  temp = [[0]*m for _ in range(n)]
+  for i in range(n):
+    for j in range(m):
+      temp[i][j] = graph[i][j]
+
+  for x in range(n):
+    for y in range(m):
+      if graph[x][y]>0:
+        for d in range(4):
+          nx = x + dx[d]
+          ny = y + dy[d]
+          if nx>=0 and nx<n and ny>=0 and ny<m:
+            if graph[nx][ny]!=-1:
+              temp[nx][ny] += graph[x][y]//5
+              temp[x][y] -= graph[x][y]//5
+
+  return temp
+
+def fresh(graph,fresh_loc):
+  x,y = fresh_loc[0]
+  d = 0
+  while True:
+    nx = x + dx[d]
+    ny = y + dy[d]
+    if nx>=0 and nx<fresh_loc[0][0]+1 and ny>=0 and ny<m:
+      if graph[nx][ny]==-1:
+        break
+      if graph[x][y]==-1:
+        graph[nx][ny] = 0
+      else:
+        graph[x][y] = graph[nx][ny]
+        graph[nx][ny] = 0
+      x,y = nx,ny
+    else:
+      d = (d+1)%4
+
+  x,y = fresh_loc[1]
+  d = 2
+  while True:
+    nx = x + dx[d]
+    ny = y + dy[d]
+    if nx>=fresh_loc[1][0] and nx<n and ny>=0 and ny<m:
+      if graph[nx][ny]==-1:
+        break
+      if graph[x][y]==-1:
+        graph[nx][ny] = 0
+      else:
+        graph[x][y] = graph[nx][ny]
+        graph[nx][ny] = 0
+      x,y = nx,ny
+    else:
+      d = (d-1)%4
+
+  return graph
+
+def solution(t,_graph):
+  graph = copy.deepcopy(_graph)
+
+  fresh_loc = []
+  for i in range(n):
+    for j in range(m):
+      if graph[i][j]==-1:
+        fresh_loc.append((i,j))
+
+  time = 0
+  while time<t:
+    graph = spread(graph)
+    graph = fresh(graph,fresh_loc)
+    time += 1
+
+  result = 0
+  for i in range(n):
+    for j in range(m):
+      if graph[i][j]>0:
+        result += graph[i][j]
+
+  return result
+
+n,m,t = map(int,input().split())
+graph = []
+for _ in range(n):
+  graph.append(list(map(int,input().split())))
+
+print(solution(t,graph))

@@ -1,1 +1,105 @@
-{"nbformat":4,"nbformat_minor":0,"metadata":{"colab":{"provenance":[],"authorship_tag":"ABX9TyNRLb7fvYzm+MWBkhghJ2Sv"},"kernelspec":{"name":"python3","display_name":"Python 3"},"language_info":{"name":"python"}},"cells":[{"cell_type":"code","execution_count":null,"metadata":{"id":"SywwVuxkq7Ic"},"outputs":[],"source":["# 17822\n","\n","'''\n","y좌표는 넘어가서 인접하지만 x좌표는 안그럼\n","구현함수\n","- i번째 원판 d방향으로 회전시키는 함수\n","- 인접한 수들의 집합 찾아서 없애는 함수\n","- 평균작하는 함수\n","'''\n","\n","from collections import deque\n","\n","dx = [-1,1,0,0]\n","dy = [0,0,-1,1]\n","\n","def rotate(board,i,d,k):\n","  temp = board[i][1:]\n","  if d==0:\n","    for _ in range(k):\n","      temp = [temp[-1]] + temp[:-1]\n","  else:\n","    for _ in range(k):\n","      temp = temp[1:] + [temp[0]]\n","\n","  board[i] = ['X'] + temp\n","\n","  return board\n","\n","def adjacent(board):\n","  result = []\n","  for i in range(1,n+1):\n","    for j in range(1,m+1):\n","      if (i,j) in result:\n","        continue\n","      target = board[i][j]\n","      if target=='X':\n","        continue\n","      queue = deque()\n","      queue.append((i,j))\n","      while queue:\n","        x,y = queue.popleft()\n","        for d in range(4):\n","          nx = x + dx[d]\n","          ny = (y+dy[d]-1)%m + 1\n","          if nx>0 and nx<=n and ny>0 and ny<=m:\n","            if board[nx][ny]==target and (nx,ny) not in result:\n","              queue.append((nx,ny))\n","              result.append((nx,ny))\n","\n","  return result\n","\n","def normalize(board):\n","  _sum = 0\n","  count = 0\n","  for i in range(1,n+1):\n","    for j in range(1,m+1):\n","      if board[i][j]!='X':\n","        _sum += board[i][j]\n","        count += 1\n","\n","  if count==0:\n","    return board\n","\n","  _mean = _sum / count\n","  for i in range(1,n+1):\n","    for j in range(1,m+1):\n","      if board[i][j]!='X':\n","        if board[i][j]>_mean:\n","          board[i][j] -= 1\n","        elif board[i][j]<_mean:\n","          board[i][j] += 1\n","\n","  return board\n","\n","def solution(board,data):\n","  for x,d,k in data:\n","    # step 1\n","    for i in range(1,n//x+1):\n","      board = rotate(board,i*x,d,k)\n","\n","    # step 2\n","    temp = adjacent(board)\n","    if temp:\n","      for a,b in temp:\n","        board[a][b] = 'X'\n","    else:\n","      board = normalize(board)\n","\n","  result = 0\n","  for i in range(1,n+1):\n","    for j in range(1,m+1):\n","      if board[i][j]!='X':\n","        result += board[i][j]\n","\n","  return result\n","\n","n,m,t = map(int,input().split())\n","board = [['X'] * (m+1)]\n","for _ in range(n):\n","  board.append(['X'] + list(map(int,input().split())))\n","data = []\n","for _ in range(t):\n","  data.append(list(map(int,input().split())))\n","\n","print(solution(board,data))"]}]}
+# 17822
+
+'''
+y좌표는 넘어가서 인접하지만 x좌표는 안그럼
+구현함수
+- i번째 원판 d방향으로 회전시키는 함수
+- 인접한 수들의 집합 찾아서 없애는 함수
+- 평균작하는 함수
+'''
+
+from collections import deque
+
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+
+def rotate(board,i,d,k):
+  temp = board[i][1:]
+  if d==0:
+    for _ in range(k):
+      temp = [temp[-1]] + temp[:-1]
+  else:
+    for _ in range(k):
+      temp = temp[1:] + [temp[0]]
+
+  board[i] = ['X'] + temp
+
+  return board
+
+def adjacent(board):
+  result = []
+  for i in range(1,n+1):
+    for j in range(1,m+1):
+      if (i,j) in result:
+        continue
+      target = board[i][j]
+      if target=='X':
+        continue
+      queue = deque()
+      queue.append((i,j))
+      while queue:
+        x,y = queue.popleft()
+        for d in range(4):
+          nx = x + dx[d]
+          ny = (y+dy[d]-1)%m + 1
+          if nx>0 and nx<=n and ny>0 and ny<=m:
+            if board[nx][ny]==target and (nx,ny) not in result:
+              queue.append((nx,ny))
+              result.append((nx,ny))
+
+  return result
+
+def normalize(board):
+  _sum = 0
+  count = 0
+  for i in range(1,n+1):
+    for j in range(1,m+1):
+      if board[i][j]!='X':
+        _sum += board[i][j]
+        count += 1
+
+  if count==0:
+    return board
+
+  _mean = _sum / count
+  for i in range(1,n+1):
+    for j in range(1,m+1):
+      if board[i][j]!='X':
+        if board[i][j]>_mean:
+          board[i][j] -= 1
+        elif board[i][j]<_mean:
+          board[i][j] += 1
+
+  return board
+
+def solution(board,data):
+  for x,d,k in data:
+    # step 1
+    for i in range(1,n//x+1):
+      board = rotate(board,i*x,d,k)
+
+    # step 2
+    temp = adjacent(board)
+    if temp:
+      for a,b in temp:
+        board[a][b] = 'X'
+    else:
+      board = normalize(board)
+
+  result = 0
+  for i in range(1,n+1):
+    for j in range(1,m+1):
+      if board[i][j]!='X':
+        result += board[i][j]
+
+  return result
+
+n,m,t = map(int,input().split())
+board = [['X'] * (m+1)]
+for _ in range(n):
+  board.append(['X'] + list(map(int,input().split())))
+data = []
+for _ in range(t):
+  data.append(list(map(int,input().split())))
+
+print(solution(board,data))

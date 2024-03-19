@@ -1,1 +1,74 @@
-{"nbformat":4,"nbformat_minor":0,"metadata":{"colab":{"provenance":[],"authorship_tag":"ABX9TyNZ6DcFCUs5Ovek1TPzXSFQ"},"kernelspec":{"name":"python3","display_name":"Python 3"},"language_info":{"name":"python"}},"cells":[{"cell_type":"code","execution_count":null,"metadata":{"id":"LaDmK880qCCg"},"outputs":[],"source":["# 18428\n","\n","import copy\n","from collections import deque\n","\n","dx = [-1,1,0,0]\n","dy = [0,0,-1,1]\n","\n","def avoid():\n","  result = True\n","  for i,j in students:\n","    if not result:\n","      break\n","    for d in range(4):\n","      if not result:\n","        break\n","      x,y = i,j\n","      while True:\n","        nx = x + dx[d]\n","        ny = y + dy[d]\n","        if nx>=0 and nx<n and ny>=0 and ny<n:\n","          if temp[nx][ny]=='X':\n","            x,y = nx,ny\n","          elif temp[nx][ny]=='O' or temp[nx][ny]=='S':\n","            break\n","          else:\n","            result = False\n","            break\n","        else:\n","          break\n","\n","  return result\n","\n","def dfs(count):\n","  global result\n","  if count==3:\n","    if avoid():\n","      result = True\n","\n","  else:\n","    for i in range(n):\n","      for j in range(n):\n","        if temp[i][j]=='X':\n","          temp[i][j] = 'O'\n","          dfs(count+1)\n","          temp[i][j] = 'X'\n","\n","def solution(n,graph):\n","  global result\n","  global students\n","  global temp\n","\n","  result = False\n","  students = []\n","  for i in range(n):\n","    for j in range(n):\n","      if graph[i][j]=='S':\n","        students.append((i,j))\n","\n","  temp = copy.deepcopy(graph)\n","\n","  dfs(0)\n","\n","  if not result:\n","    return 'NO'\n","  else:\n","    return 'YES'\n","\n","n = int(input())\n","graph = []\n","for _ in range(n):\n","  graph.append(list(input().split()))\n","\n","print(solution(n,graph))"]}]}
+# 18428
+
+import copy
+from collections import deque
+
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+
+def avoid():
+  result = True
+  for i,j in students:
+    if not result:
+      break
+    for d in range(4):
+      if not result:
+        break
+      x,y = i,j
+      while True:
+        nx = x + dx[d]
+        ny = y + dy[d]
+        if nx>=0 and nx<n and ny>=0 and ny<n:
+          if temp[nx][ny]=='X':
+            x,y = nx,ny
+          elif temp[nx][ny]=='O' or temp[nx][ny]=='S':
+            break
+          else:
+            result = False
+            break
+        else:
+          break
+
+  return result
+
+def dfs(count):
+  global result
+  if count==3:
+    if avoid():
+      result = True
+
+  else:
+    for i in range(n):
+      for j in range(n):
+        if temp[i][j]=='X':
+          temp[i][j] = 'O'
+          dfs(count+1)
+          temp[i][j] = 'X'
+
+def solution(n,graph):
+  global result
+  global students
+  global temp
+
+  result = False
+  students = []
+  for i in range(n):
+    for j in range(n):
+      if graph[i][j]=='S':
+        students.append((i,j))
+
+  temp = copy.deepcopy(graph)
+
+  dfs(0)
+
+  if not result:
+    return 'NO'
+  else:
+    return 'YES'
+
+n = int(input())
+graph = []
+for _ in range(n):
+  graph.append(list(input().split()))
+
+print(solution(n,graph))

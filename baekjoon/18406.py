@@ -1,1 +1,18 @@
-{"nbformat":4,"nbformat_minor":0,"metadata":{"colab":{"provenance":[],"authorship_tag":"ABX9TyNX8rPqCwymEq22D3O/g/7N"},"kernelspec":{"name":"python3","display_name":"Python 3"},"language_info":{"name":"python"}},"cells":[{"cell_type":"code","execution_count":null,"metadata":{"id":"JhHK19CTsp2E"},"outputs":[],"source":["# 18406\n","\n","def solution(string):\n","  n = len(string)\n","  a = string[:n//2]\n","  b = string[n//2:]\n","  result = 0\n","  for i,j in zip(a,b):\n","    i = int(i)\n","    j = int(j)\n","    result += i-j\n","\n","  if result==0:\n","    print('LUCKY')\n","  else:\n","    print('READY')\n","\n","solution(input())"]}]}
+# 18406
+
+def solution(string):
+  n = len(string)
+  a = string[:n//2]
+  b = string[n//2:]
+  result = 0
+  for i,j in zip(a,b):
+    i = int(i)
+    j = int(j)
+    result += i-j
+
+  if result==0:
+    print('LUCKY')
+  else:
+    print('READY')
+
+solution(input())

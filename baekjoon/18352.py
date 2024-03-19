@@ -1,1 +1,33 @@
-{"nbformat":4,"nbformat_minor":0,"metadata":{"colab":{"provenance":[],"authorship_tag":"ABX9TyMVj1TLTK2ZHKuDbrTIL7N4"},"kernelspec":{"name":"python3","display_name":"Python 3"},"language_info":{"name":"python"}},"cells":[{"cell_type":"code","execution_count":null,"metadata":{"id":"oSppNjgJpp1Q"},"outputs":[],"source":["# 18352\n","\n","from collections import deque\n","\n","def solution(graph,n,k,start):\n","  dist = [int(1e9)] * n\n","  queue = deque()\n","  dist[start] = 0\n","  queue.append(start)\n","\n","  while queue:\n","    x = queue.popleft()\n","    for nx in graph[x]:\n","      if dist[nx]>dist[x]+1:\n","        queue.append(nx)\n","        dist[nx] = dist[x] + 1\n","\n","  check = False\n","  for i,d in enumerate(dist):\n","    if d==k:\n","      print(i+1)\n","      check = True\n","\n","  if not check:\n","    print(-1)\n","\n","n,m,k,start = map(int,input().split())\n","graph = [[] for _ in range(n)]\n","for _ in range(m):\n","  a,b = map(int,input().split())\n","  graph[a-1].append(b-1)\n","\n","solution(graph,n,k,start-1)"]}]}
+# 18352
+
+from collections import deque
+
+def solution(graph,n,k,start):
+  dist = [int(1e9)] * n
+  queue = deque()
+  dist[start] = 0
+  queue.append(start)
+
+  while queue:
+    x = queue.popleft()
+    for nx in graph[x]:
+      if dist[nx]>dist[x]+1:
+        queue.append(nx)
+        dist[nx] = dist[x] + 1
+
+  check = False
+  for i,d in enumerate(dist):
+    if d==k:
+      print(i+1)
+      check = True
+
+  if not check:
+    print(-1)
+
+n,m,k,start = map(int,input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+  a,b = map(int,input().split())
+  graph[a-1].append(b-1)
+
+solution(graph,n,k,start-1)
