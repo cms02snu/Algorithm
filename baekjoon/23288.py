@@ -16,6 +16,8 @@ def score(graph,i,j):
     count = 1
     queue = deque()
     queue.append((i,j))
+    visited = set()
+    visited.add((i,j))
 
     while queue:
         x,y = queue.popleft()
@@ -23,21 +25,22 @@ def score(graph,i,j):
             nx = x + dx[d]
             ny = y + dy[d]
             if nx>=0 and nx<n and ny>=0 and ny<m:
-                if graph[nx][ny]==s:
+                if graph[nx][ny]==s and (nx,ny) not in visited:
                     queue.append((nx,ny))
+                    visited.add((nx,ny))
                     count += 1
 
     return count * s
 
 def roll(dice,d):
     if d==0:
-        dice = [d[4],d[0],d[2],d[3],d[5],d[1]]
+        dice = [dice[4],dice[0],dice[2],dice[3],dice[5],dice[1]]
     if d==1:
-        dice = [d[3],d[1],d[0],d[5],d[4],d[2]]
+        dice = [dice[3],dice[1],dice[0],dice[5],dice[4],dice[2]]
     if d==2:
-        dice = [d[1],d[5],d[2],d[3],d[0],d[4]]
+        dice = [dice[1],dice[5],dice[2],dice[3],dice[0],dice[4]]
     if d==3:
-        dice = [d[2],d[1],d[5],d[0],d[4],d[3]]
+        dice = [dice[2],dice[1],dice[5],dice[0],dice[4],dice[3]]
 
     return dice
 
@@ -56,6 +59,8 @@ def solution(k,graph):
             nx = x + dx[d]
             ny = y + dy[d]
 
+        dice = roll(dice,d)
+
         # step 2
         result += score(graph,nx,ny)
 
@@ -69,9 +74,17 @@ def solution(k,graph):
 
     return result
 
-n,m,k = map(int,input().split())
+'''n,m,k = map(int,input().split())
 graph = []
 for _ in range(n):
-    graph.append(list(map(int,input().split())))
+    graph.append(list(map(int,input().split())))'''
+
+n,m,k = 4,5,1000
+graph = [
+    [4,1,2,3,3],
+    [6,1,1,3,3],
+    [5,6,1,3,2],
+    [5,5,6,5,5]
+]
 
 print(solution(k,graph))
