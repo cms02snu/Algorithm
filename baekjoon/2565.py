@@ -1,5 +1,3 @@
-# 2565
-
 '''
 LIS
 '''
@@ -23,11 +21,9 @@ def lis(dataset):
 def solution(n,data):
     data.sort()
 
-    temp0 = [b for (a,b) in data]
-    temp1 = temp0[::-1]
-    temp1 = [-a for a in temp1]
+    temp = [b for (a,b) in data]
 
-    return n - max(lis(temp0),lis(temp1))
+    return n - lis(temp)
 
 n = int(input())
 data = []
