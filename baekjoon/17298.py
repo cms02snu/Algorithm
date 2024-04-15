@@ -1,39 +1,34 @@
 # 17298
 
 '''
-큰수부터 반복문 진행
-index 리스트에는 자기보다 큰 수들의 index가 들어있을텐데 이중 자기의 index의 위치를
-이진탐색하여 오큰수의 index 찾음
-자기보다 큰 수 중 자기의 index보다 큰 index가 없으면, 즉 이진탐색한 위치가
-끝자리라면 -1 결과
-그 후 자기의 index 이진탐색한 자리에 삽입
+stack 사용
+새로 넣는 수가 stack 끝수보다 크면 stack 끝수의 오큰수는 새로 넣는 수가 된다
+stack 비거나 stack 끝수가 더 커질때까지 반복
+그 후 stack에 수의 index와 함께 삽입
+반복문 종료 후 stack에 남아있는 수는 -1
 '''
 
-from bisect import bisect_left,insort
 import sys
 input = lambda : sys.stdin.readline().rstrip()
 
 def solution(data):
-    temp = [(a,i) for i,a in enumerate(data)]
-    temp.sort(key=lambda x:-x[0])
-    index = []
-    result = [0] * n
+    stack = []
+    result = [-1] * n
 
-    for l in range(n):
-        i = temp[l][1]
-        if not index:
-            result[i] = '-1'
-            index.append(i)
+    for i,a in enumerate(data):
+        if i==0:
+            stack.append((a,0))
         else:
-            idx = bisect_left(index,i)
-            if idx==l:
-                result[i] = '-1'
-                index.append(i)
-            else:
-                result[i] = str(data[index[idx]])
-                insort(index,i)
+            while stack:
+                if a>stack[-1][0]:
+                    _,j = stack.pop()
+                    result[j] = a
+                else:
+                    break
+            stack.append((a,i))
 
-    print(' '.join(result))
+    for a in result:
+        print(a,end=' ')
             
 n = int(input())
 data = list(map(int,input().split()))
