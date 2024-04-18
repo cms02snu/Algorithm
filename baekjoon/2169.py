@@ -19,46 +19,34 @@ def solution(data):
     for j in range(1,m):
         table[0][j][1] = table[0][j-1][1] + data[0][j]
 
-    for x in range(1,n):
+    for x in range(1,n-1):
         for y in range(m):
-            for d in range(3):
-                t = max(table[x-1][y])
-                if t!=-int(1e9):
-                    table[x][y][0] = t + data[x][y]
+            # 0부터 갱신
+            t = max(table[x-1][y])
+            if t!=-int(1e9):
+                table[x][y][0] = t + data[x][y]
 
-                if y==0:
-                    t = max(table[x][y+1][2],table[x][y+1][0])
-                    if t!=-int(1e9):
-                        table[x][y][2] = t + data[x][y]
-                elif y==m-1:
-                    t = max(table[x][y-1][1],table[x][y-1][0])
-                    if t!=-int(1e9):
-                        table[x][y][1] = t + data[x][y]
-                else:
-                    t = max(table[x][y-1][1],table[x][y-1][0])
-                    if t!=-int(1e9):
-                        table[x][y][1] = t + data[x][y]
+        for y in range(m):                
+            # 1 갱신
+            if y>0:
+                table[x][y][1] = max(table[x][y-1][0],table[x][y-1][1]) + data[x][y]
 
-                    t = max(table[x][y+1][2],table[x][y+1][0])
-                    if t!=-int(1e9):
-                        table[x][y][2] = t + data[x][y]
+        for y in range(m-1,-1,-1):
+            # 2 갱신
+            if y<m-1:
+                table[x][y][2] = max(table[x][y+1][0],table[x][y+1][2]) + data[x][y]
 
-    print(table)
+    if n>1:
+        for j in range(m):
+            table[n-1][j][0] = max(table[n-2][j]) + data[n-1][j]
+        for j in range(1,m):
+            table[n-1][j][1] = max(table[n-1][j-1][0],table[n-1][j-1][1]) + data[n-1][j]
 
     return max(table[n-1][m-1])                  
 
-'''n,m = map(int,input().split())
+n,m = map(int,input().split())
 data = []
 for _ in range(n):
-    data.append(list(map(int,input().split())))'''
-
-n,m = 5,5
-data = [
-    [10,25,7,8,13],
-    [68,24,-78,63,32],
-    [12,-69,100,-29,-25],
-    [-16,-22,-57,-33,99],
-    [7,-76,-11,77,15]
-]
+    data.append(list(map(int,input().split())))
 
 print(solution(data))
