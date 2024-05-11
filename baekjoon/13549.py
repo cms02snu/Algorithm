@@ -28,6 +28,41 @@ def solution(n,k):
 
   return table[k]
 
+def d2(i,n):
+  while True:
+    if i%2==1:
+      return i
+    
+    if i//2<n:
+      return i
+    
+    i //= 2
+
+def solution2(n,k):
+  if n>=k:
+    return n-k
+  
+  table = [-1] * (2*k+1)
+
+  for i in range(n):
+    table[i] = n-i
+
+  for i in range(n+1,k+1):
+    if i%2==0:
+      table[i] = i-n
+
+  for i in range(n+1,2*k+1):
+    if i%2==0:
+      j = d2(i,n)
+      if j%2==1:
+        if table[j]==-1:
+          table[j] = min(table[j-1],table[j+1]) + 1
+      table[i] = table[j]
+
+  print(table)
+
+  return table[k]
+
 n,k = map(int,input().split())
 
-print(solution(n,k))
+print(solution2(n,k))
