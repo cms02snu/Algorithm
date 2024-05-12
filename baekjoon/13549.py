@@ -42,9 +42,9 @@ def solution2(n,k):
   if n>=k:
     return n-k
   
-  table = [-1] * (2*k+1)
+  table = [N] * (2*k+1)
 
-  for i in range(n):
+  for i in range(n+1):
     table[i] = n-i
 
   for i in range(n+1,k+1):
@@ -53,13 +53,16 @@ def solution2(n,k):
 
   for i in range(n+1,2*k+1):
     if i%2==0:
-      j = d2(i,n)
-      if j%2==1:
-        if table[j]==-1:
-          table[j] = min(table[j-1],table[j+1]) + 1
-      table[i] = table[j]
-
-  print(table)
+      j = i//2
+      while True:
+        if j%2==1:
+          if j>n and table[j]==N:
+            table[j] = min(table[j-1],table[j+1]) + 1
+          table[i] = min(table[i],table[j])
+          break
+        else:
+          table[i] = min(table[i],table[j])
+          j //= 2
 
   return table[k]
 
